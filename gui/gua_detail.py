@@ -75,11 +75,13 @@ class GuaDetail(QWidget):
             trend = self._predictor.predict(stock.code)
             report = self._builder.build(stock, gua, analysis, trend)
 
+            yao_symbol = {"阳": "━━━━━━", "阴": "━━  ━━"}
             yao_lines = []
             for i in range(5, -1, -1):
                 marker = "← 动爻" if (i + 1) == gua.dong_yao else ""
+                symbol = yao_symbol.get(gua.yao_list[i], gua.yao_list[i])
                 yao_lines.append(
-                    f"  {i+1}爻  {gua.yao_list[i]}  {analysis.liu_qin[i]}  {analysis.liu_shen[i]} {marker}"
+                    f"  {i+1}爻  {symbol}  {analysis.liu_qin[i]}  {analysis.liu_shen[i]} {marker}"
                 )
             gua_content = (
                 f"卦名：{gua.gua_name}\n\n"
