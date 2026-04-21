@@ -28,9 +28,7 @@ class LiuYaoEngine:
         lower_yaos = self._data["bagua"][str(lower_idx)]["yaos"]
         yao_list = lower_yaos + upper_yaos  # 初爻在下，上爻在上
 
-        upper_name = self._data["bagua"][str(upper_idx)]["name"]
-        lower_name = self._data["bagua"][str(lower_idx)]["name"]
-        gua_name = f"{upper_name}{lower_name}"
+        gua_name = self._data["gua64"][f"{upper_idx}_{lower_idx}"]
 
         return GuaXiang(
             upper_gua=upper_idx,
