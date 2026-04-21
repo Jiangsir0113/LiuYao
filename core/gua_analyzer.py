@@ -1,4 +1,5 @@
 import json
+import sys
 from pathlib import Path
 from core.data_models import GuaXiang, GuaAnalysis
 
@@ -15,7 +16,8 @@ _LIUSHEN = ["青龙", "朱雀", "勾陈", "腾蛇", "白虎", "玄武"]
 
 class GuaAnalyzer:
     def __init__(self):
-        data_path = Path(__file__).parent.parent / "assets" / "gua_data.json"
+        base = Path(getattr(sys, "_MEIPASS", Path(__file__).parent.parent))
+        data_path = base / "assets" / "gua_data.json"
         with open(data_path, encoding="utf-8") as f:
             self._data = json.load(f)
 

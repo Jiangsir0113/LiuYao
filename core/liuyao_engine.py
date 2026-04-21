@@ -1,4 +1,5 @@
 import json
+import sys
 from datetime import datetime, date
 from pathlib import Path
 from core.data_models import GuaXiang
@@ -6,7 +7,8 @@ from core.data_models import GuaXiang
 
 class LiuYaoEngine:
     def __init__(self):
-        data_path = Path(__file__).parent.parent / "assets" / "gua_data.json"
+        base = Path(getattr(sys, "_MEIPASS", Path(__file__).parent.parent))
+        data_path = base / "assets" / "gua_data.json"
         with open(data_path, encoding="utf-8") as f:
             self._data = json.load(f)
 
