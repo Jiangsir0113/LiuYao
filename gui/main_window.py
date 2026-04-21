@@ -33,3 +33,4 @@ class MainWindow(QMainWindow):
 
         self.filter_panel.search_requested.connect(self.result_table.load_stocks)
         self.result_table.stock_selected.connect(self.gua_detail.show_analysis)
+        self.result_table.loading_changed.connect(self.filter_panel.set_loading)
