@@ -69,7 +69,7 @@ class GuaDetail(QWidget):
         self._conclusion_label.setText("")
 
         try:
-            gua = self._engine.qigua()
+            gua = self._engine.qigua(stock.code)
             rigan_wuxing = self._engine.get_rigan_wuxing()
             analysis = self._analyzer.analyze(gua, rigan_wuxing)
             trend = self._predictor.predict(stock.code)

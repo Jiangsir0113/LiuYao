@@ -12,14 +12,17 @@ class LiuYaoEngine:
         with open(data_path, encoding="utf-8") as f:
             self._data = json.load(f)
 
-    def qigua(self) -> GuaXiang:
+    def qigua(self, stock_code: str = "") -> GuaXiang:
         now = datetime.now()
         year, month, day, hour = now.year, now.month, now.day, now.hour
         shichen = self._get_shichen(hour)
 
-        upper_idx = (year + month + day) % 8 or 8
-        lower_idx = (year + month + day + shichen) % 8 or 8
-        dong_yao = (year + month + day + shichen) % 6 or 6
+        # 提取股票代码中的纯数字之和，作为个股区分因子
+        code_sum = sum(int(c) for c in stock_code if c.isdigit())
+
+        upper_idx = (year + month + day + code_sum) % 8 or 8
+        lower_idx = (year + month + day + shichen + code_sum) % 8 or 8
+        dong_yao = (year + month + day + shichen + code_sum) % 6 or 6
 
         upper_yaos = self._data["bagua"][str(upper_idx)]["yaos"]
         lower_yaos = self._data["bagua"][str(lower_idx)]["yaos"]
