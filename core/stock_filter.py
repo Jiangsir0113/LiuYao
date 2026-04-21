@@ -1,6 +1,10 @@
+import os
 import akshare as ak
 import pandas as pd
 from core.data_models import StockInfo
+
+for _k in ("HTTP_PROXY", "HTTPS_PROXY", "http_proxy", "https_proxy"):
+    os.environ.pop(_k, None)
 
 
 class StockFilter:
@@ -10,7 +14,8 @@ class StockFilter:
         min_change: float = -3.0,
         max_change: float = 7.0,
     ) -> list[StockInfo]:
-        df = ak.stock_zh_a_spot_em()
+        # 使用新浪财经接口，在 WSL/Linux 环境下可用
+        df = ak.stock_zh_a_spot()
         df = df.rename(columns={
             "代码": "code", "名称": "name",
             "成交量": "volume", "涨跌幅": "change_pct"

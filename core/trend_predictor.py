@@ -1,7 +1,11 @@
+import os
 import akshare as ak
 import pandas as pd
 import numpy as np
 from core.data_models import TrendPrediction
+
+for _k in ("HTTP_PROXY", "HTTPS_PROXY", "http_proxy", "https_proxy"):
+    os.environ.pop(_k, None)
 
 
 def _ema(series: pd.Series, span: int) -> pd.Series:
@@ -36,16 +40,21 @@ class TrendPredictor:
         return self._calculate(df)
 
     def _fetch_kline(self, stock_code: str) -> pd.DataFrame:
-        """获取K线数据"""
-        df = ak.stock_zh_a_hist(
-            symbol=stock_code, period="daily",
-            start_date="", end_date="", adjust="qfq"
-        )
+        # stock_code 已含市场前缀（如 sh600000），直接传入
+        # 若不含前缀则按规则补全
+        if stock_code[:2] in ("sh", "sz", "bj"):
+            symbol = stock_code
+        elif stock_code.startswith("6"):
+            symbol = f"sh{stock_code}"
+        elif stock_code.startswith("8") or stock_code.startswith("4"):
+            symbol = f"bj{stock_code}"
+        else:
+            symbol = f"sz{stock_code}"
+        df = ak.stock_zh_a_daily(symbol=symbol, adjust="qfq")
         return df.tail(60).reset_index(drop=True)
 
     def _calculate(self, df: pd.DataFrame) -> TrendPrediction:
-        """计算技术指标和趋势"""
-        closes = df["收盘"].astype(float)
+        closes = df["close"].astype(float)
 
         # 计算移动平均线
         ma5 = float(closes.rolling(5).mean().iloc[-1])
