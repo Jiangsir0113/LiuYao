@@ -1,11 +1,15 @@
 # -*- mode: python ; coding: utf-8 -*-
-
+import os, akshare
+akshare_dir = os.path.dirname(akshare.__file__)
 
 a = Analysis(
     ['main.py'],
     pathex=[],
     binaries=[],
-    datas=[('assets/gua_data.json', 'assets')],
+    datas=[
+        ('assets/gua_data.json', 'assets'),
+        (akshare_dir, 'akshare'),
+    ],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
